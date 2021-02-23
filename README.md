@@ -2,17 +2,17 @@
 The default cupertino picker does not allow customization to the border color and scroll physics. So I've copied the class and added some properties to it.
 
 Added the following properties:
- - highlighterBorderColor 
-    - // Border color for the magnifier.
- - highlighterBorder 
-    - // Border for the magnifier. If this one is set
+ 1. highlighterBorderColor 
+    - Border color for the magnifier.
+ 2. highlighterBorder 
+    - Border for the magnifier. If this one is set
     the highlighterBorderColor will be ignored.
 
- - highlighterBorderWidth
-    - // Border width for the magnifier if you
+ 3. highlighterBorderWidth
+    - Border width for the magnifier if you
     don't fill the border to the full width
- - scrollPhysics
-    - // ScrollPhysics for the ScrollView if you want
+ 4. scrollPhysics
+    - ScrollPhysics for the ScrollView if you want
     to override the default physics.
 
 ## Getting Started
@@ -27,13 +27,16 @@ and use it for example like below
 CustomCupertinoPicker(
     highlighterBorder: Border(
         top: BorderSide(
-            width: 1.0, color: Colors.orange),
+            width: 1.0, color: Colors.orange,
+        ),
         bottom: BorderSide(
-            width: 1.0, color: Colors.orange),
+            width: 1.0, color: Colors.orange,
+        ),
     ),
     highlighterBorderWidth: 60,
     scrollPhysics: const FixedExtentScrollPhysics(
-        parent: BouncingScrollPhysics()),
+        parent: BouncingScrollPhysics(),
+    ),
     children: ...
 )
 ```
