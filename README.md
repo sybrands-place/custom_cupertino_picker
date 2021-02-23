@@ -37,4 +37,4 @@ CustomCupertinoPicker(
     children: ...
 )
 ```
-![alt text](preview.png "Logo Title Text 1")
+![preview](https://github.com/sybrands-place/custom_cupertino_picker/blob/main/preview.png "Customized cupertino picker")
