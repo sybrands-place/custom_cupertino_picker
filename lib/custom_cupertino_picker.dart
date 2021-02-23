@@ -51,7 +51,7 @@ const double _kOverAndUnderCenterOpacity = 0.447;
 ///  * [ListWheelScrollView], the generic widget backing this picker without
 ///    the iOS design specific chrome.
 ///  * <https://developer.apple.com/ios/human-interface-guidelines/controls/pickers/>
-class CupertinoPicker extends StatefulWidget {
+class CustomCupertinoPicker extends StatefulWidget {
   /// Creates a picker from a concrete list of children.
   ///
   /// The [diameterRatio] and [itemExtent] arguments must not be null. The
@@ -70,7 +70,7 @@ class CupertinoPicker extends StatefulWidget {
   /// scrolled infinitely.  If set to true, scrolling past the end of the list
   /// will loop the list back to the beginning.  If set to false, the list will
   /// stop scrolling when you reach the end or the beginning.
-  CupertinoPicker({
+  CustomCupertinoPicker({
     Key key,
     this.diameterRatio = _kDefaultDiameterRatio,
     this.backgroundColor,
@@ -114,7 +114,7 @@ class CupertinoPicker extends StatefulWidget {
   /// The [backgroundColor] defaults to null, which disables background painting entirely.
   /// (i.e. the picker is going to have a completely transparent background), to match
   /// the native UIPicker and UIDatePicker.
-  CupertinoPicker.builder({
+  CustomCupertinoPicker.builder({
     Key key,
     this.diameterRatio = _kDefaultDiameterRatio,
     this.backgroundColor,
