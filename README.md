@@ -1,14 +1,40 @@
 # custom_cupertino_picker
+The default cupertino picker does not allow customization to the border color and scroll physics. So I've copied the class and added some properties to it.
 
-A new Flutter package project.
+Added the following properties:
+ - highlighterBorderColor 
+    - // Border color for the magnifier.
+ - highlighterBorder 
+    - // Border for the magnifier. If this one is set
+    the highlighterBorderColor will be ignored.
+
+ - highlighterBorderWidth
+    - // Border width for the magnifier if you
+    don't fill the border to the full width
+ - scrollPhysics
+    - // ScrollPhysics for the ScrollView if you want
+    to override the default physics.
 
 ## Getting Started
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+import the package
+```dart
+import 'package:custom_cupertino_picker/custom_cupertino_picker.dart';
+```
+and use it for example like below
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```dart
+CustomCupertinoPicker(
+    highlighterBorder: Border(
+        top: BorderSide(
+            width: 1.0, color: Colors.orange),
+        bottom: BorderSide(
+            width: 1.0, color: Colors.orange),
+    ),
+    highlighterBorderWidth: 60,
+    scrollPhysics: const FixedExtentScrollPhysics(
+        parent: BouncingScrollPhysics()),
+    children: ...
+)
+```
+![alt text](preview.png "Logo Title Text 1")

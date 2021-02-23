@@ -6,12 +6,11 @@ library custom_cupertino_picker;
 
 // @dart = 2.8
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:flutter/cupertino.dart';
 
 /// Color of the 'magnifier' lens border.
 const Color _kHighlighterBorder = CupertinoDynamicColor.withBrightness(
@@ -79,6 +78,10 @@ class CustomCupertinoPicker extends StatefulWidget {
     this.magnification = 1.0,
     this.scrollController,
     this.squeeze = _kSqueeze,
+    this.highlighterBorderColor = _kHighlighterBorder,
+    this.highlighterBorder,
+    this.highlighterBorderWidth,
+    this.scrollPhysics,
     @required this.itemExtent,
     @required this.onSelectedItemChanged,
     @required List<Widget> children,
@@ -92,6 +95,7 @@ class CustomCupertinoPicker extends StatefulWidget {
         assert(itemExtent > 0),
         assert(squeeze != null),
         assert(squeeze > 0),
+        assert(highlighterBorderColor != null),
         childDelegate = looping
             ? ListWheelChildLoopingListDelegate(children: children)
             : ListWheelChildListDelegate(children: children),
@@ -123,6 +127,10 @@ class CustomCupertinoPicker extends StatefulWidget {
     this.magnification = 1.0,
     this.scrollController,
     this.squeeze = _kSqueeze,
+    this.highlighterBorderColor = _kHighlighterBorder,
+    this.highlighterBorder,
+    this.highlighterBorderWidth,
+    this.scrollPhysics,
     @required this.itemExtent,
     @required this.onSelectedItemChanged,
     @required IndexedWidgetBuilder itemBuilder,
@@ -136,6 +144,7 @@ class CustomCupertinoPicker extends StatefulWidget {
         assert(itemExtent > 0),
         assert(squeeze != null),
         assert(squeeze > 0),
+        assert(highlighterBorderColor != null),
         childDelegate = ListWheelChildBuilderDelegate(
             builder: itemBuilder, childCount: childCount),
         super(key: key);
@@ -197,11 +206,26 @@ class CustomCupertinoPicker extends StatefulWidget {
   /// A delegate that lazily instantiates children.
   final ListWheelChildDelegate childDelegate;
 
+  /// Border color for the magnifier.
+  final Color highlighterBorderColor;
+
+  /// Border for the magnifier. If this one is set
+  /// the highlighterBorderColor will be ignored.
+  final Border highlighterBorder;
+
+  /// Border width for the magnifier if you
+  /// don't fill the border to the full width
+  final double highlighterBorderWidth;
+
+  /// ScrollPhysics for the ScrollView if you want
+  /// to override the default physics.
+  final ScrollPhysics scrollPhysics;
+
   @override
   State<StatefulWidget> createState() => _CupertinoPickerState();
 }
 
-class _CupertinoPickerState extends State<CupertinoPicker> {
+class _CupertinoPickerState extends State<CustomCupertinoPicker> {
   int _lastHapticIndex;
   FixedExtentScrollController _controller;
 
@@ -214,7 +238,7 @@ class _CupertinoPickerState extends State<CupertinoPicker> {
   }
 
   @override
-  void didUpdateWidget(CupertinoPicker oldWidget) {
+  void didUpdateWidget(CustomCupertinoPicker oldWidget) {
     if (widget.scrollController != null && oldWidget.scrollController == null) {
       _controller = null;
     } else if (widget.scrollController == null &&
@@ -261,19 +285,21 @@ class _CupertinoPickerState extends State<CupertinoPicker> {
   /// Draws the magnifier borders.
   Widget _buildMagnifierScreen() {
     final Color resolvedBorderColor =
-        CupertinoDynamicColor.resolve(_kHighlighterBorder, context);
+        CupertinoDynamicColor.resolve(widget.highlighterBorderColor, context);
 
     return IgnorePointer(
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(width: 0.0, color: resolvedBorderColor),
-              bottom: BorderSide(width: 0.0, color: resolvedBorderColor),
-            ),
+            border: widget.highlighterBorder ??
+                Border(
+                  top: BorderSide(width: 0.0, color: resolvedBorderColor),
+                  bottom: BorderSide(width: 0.0, color: resolvedBorderColor),
+                ),
           ),
           constraints: BoxConstraints.expand(
             height: widget.itemExtent * widget.magnification,
+            width: widget.highlighterBorderWidth,
           ),
         ),
       ),
@@ -294,7 +320,8 @@ class _CupertinoPickerState extends State<CupertinoPicker> {
               scrollController: widget.scrollController ?? _controller,
               child: ListWheelScrollView.useDelegate(
                 controller: widget.scrollController ?? _controller,
-                physics: const FixedExtentScrollPhysics(),
+                physics:
+                    widget.scrollPhysics ?? const FixedExtentScrollPhysics(),
                 diameterRatio: widget.diameterRatio,
                 perspective: _kDefaultPerspective,
                 offAxisFraction: widget.offAxisFraction,
