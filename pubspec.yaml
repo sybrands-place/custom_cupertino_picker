@@ -1,11 +1,11 @@
 name: custom_cupertino_picker
 description: The default cupertino picker does not allow customization to the border color and scroll physics. So I've copied the class and added some properties to it.
-version: 1.0.1
+version: 1.0.2
 homepage: https://www.sybrandsplace.nl/
 repository: https://github.com/sybrands-place/custom_cupertino_picker
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:

@@ -4,13 +4,10 @@ library custom_cupertino_picker;
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart = 2.8
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 /// Color of the 'magnifier' lens border.
 const Color _kHighlighterBorder = CupertinoDynamicColor.withBrightness(
@@ -70,7 +67,7 @@ class CustomCupertinoPicker extends StatefulWidget {
   /// will loop the list back to the beginning.  If set to false, the list will
   /// stop scrolling when you reach the end or the beginning.
   CustomCupertinoPicker({
-    Key key,
+    Key? key,
     this.diameterRatio = _kDefaultDiameterRatio,
     this.backgroundColor,
     this.offAxisFraction = 0.0,
@@ -82,20 +79,15 @@ class CustomCupertinoPicker extends StatefulWidget {
     this.highlighterBorder,
     this.highlighterBorderWidth,
     this.scrollPhysics,
-    @required this.itemExtent,
-    @required this.onSelectedItemChanged,
-    @required List<Widget> children,
+    required this.itemExtent,
+    required this.onSelectedItemChanged,
+    required List<Widget> children,
     bool looping = false,
-  })  : assert(children != null),
-        assert(diameterRatio != null),
-        assert(diameterRatio > 0.0,
+  })  : assert(diameterRatio > 0.0,
             RenderListWheelViewport.diameterRatioZeroMessage),
         assert(magnification > 0),
-        assert(itemExtent != null),
         assert(itemExtent > 0),
-        assert(squeeze != null),
         assert(squeeze > 0),
-        assert(highlighterBorderColor != null),
         childDelegate = looping
             ? ListWheelChildLoopingListDelegate(children: children)
             : ListWheelChildListDelegate(children: children),
@@ -119,7 +111,7 @@ class CustomCupertinoPicker extends StatefulWidget {
   /// (i.e. the picker is going to have a completely transparent background), to match
   /// the native UIPicker and UIDatePicker.
   CustomCupertinoPicker.builder({
-    Key key,
+    Key? key,
     this.diameterRatio = _kDefaultDiameterRatio,
     this.backgroundColor,
     this.offAxisFraction = 0.0,
@@ -131,20 +123,15 @@ class CustomCupertinoPicker extends StatefulWidget {
     this.highlighterBorder,
     this.highlighterBorderWidth,
     this.scrollPhysics,
-    @required this.itemExtent,
-    @required this.onSelectedItemChanged,
-    @required IndexedWidgetBuilder itemBuilder,
-    int childCount,
-  })  : assert(itemBuilder != null),
-        assert(diameterRatio != null),
-        assert(diameterRatio > 0.0,
+    required this.itemExtent,
+    required this.onSelectedItemChanged,
+    required IndexedWidgetBuilder itemBuilder,
+    int? childCount,
+  })  : assert(diameterRatio > 0.0,
             RenderListWheelViewport.diameterRatioZeroMessage),
         assert(magnification > 0),
-        assert(itemExtent != null),
         assert(itemExtent > 0),
-        assert(squeeze != null),
         assert(squeeze > 0),
-        assert(highlighterBorderColor != null),
         childDelegate = ListWheelChildBuilderDelegate(
             builder: itemBuilder, childCount: childCount),
         super(key: key);
@@ -166,7 +153,7 @@ class CustomCupertinoPicker extends StatefulWidget {
   ///
   /// Any alpha value less 255 (fully opaque) will cause the removal of the
   /// wheel list edge fade gradient from rendering of the widget.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// {@macro flutter.rendering.wheelList.offAxisFraction}
   final double offAxisFraction;
@@ -181,7 +168,7 @@ class CustomCupertinoPicker extends StatefulWidget {
   /// to set the initial item.
   ///
   /// If null, an implicit one will be created internally.
-  final FixedExtentScrollController scrollController;
+  final FixedExtentScrollController? scrollController;
 
   /// The uniform height of all children.
   ///
@@ -201,7 +188,7 @@ class CustomCupertinoPicker extends StatefulWidget {
   /// This can be called during scrolls and during ballistic flings. To get the
   /// value only when the scrolling settles, use a [NotificationListener],
   /// listen for [ScrollEndNotification] and read its [FixedExtentMetrics].
-  final ValueChanged<int> onSelectedItemChanged;
+  final ValueChanged<int>? onSelectedItemChanged;
 
   /// A delegate that lazily instantiates children.
   final ListWheelChildDelegate childDelegate;
@@ -211,23 +198,23 @@ class CustomCupertinoPicker extends StatefulWidget {
 
   /// Border for the magnifier. If this one is set
   /// the highlighterBorderColor will be ignored.
-  final Border highlighterBorder;
+  final Border? highlighterBorder;
 
   /// Border width for the magnifier if you
   /// don't fill the border to the full width
-  final double highlighterBorderWidth;
+  final double? highlighterBorderWidth;
 
   /// ScrollPhysics for the ScrollView if you want
   /// to override the default physics.
-  final ScrollPhysics scrollPhysics;
+  final ScrollPhysics? scrollPhysics;
 
   @override
   State<StatefulWidget> createState() => _CupertinoPickerState();
 }
 
 class _CupertinoPickerState extends State<CustomCupertinoPicker> {
-  int _lastHapticIndex;
-  FixedExtentScrollController _controller;
+  int? _lastHapticIndex;
+  FixedExtentScrollController? _controller;
 
   @override
   void initState() {
@@ -268,17 +255,19 @@ class _CupertinoPickerState extends State<CustomCupertinoPicker> {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
+      default:
         hasSuitableHapticHardware = false;
         break;
     }
-    assert(hasSuitableHapticHardware != null);
+
     if (hasSuitableHapticHardware && index != _lastHapticIndex) {
       _lastHapticIndex = index;
       HapticFeedback.selectionClick();
     }
 
-    if (widget.onSelectedItemChanged != null) {
-      widget.onSelectedItemChanged(index);
+    final action = widget.onSelectedItemChanged;
+    if (action != null) {
+      action(index);
     }
   }
 
@@ -308,8 +297,8 @@ class _CupertinoPickerState extends State<CustomCupertinoPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final Color resolvedBackgroundColor =
-        CupertinoDynamicColor.resolve(widget.backgroundColor, context);
+    final resolvedBackgroundColor =
+        CupertinoDynamicColor.maybeResolve(widget.backgroundColor, context);
 
     final Widget result = DefaultTextStyle(
       style: CupertinoTheme.of(context).textTheme.pickerTextStyle,
@@ -317,7 +306,7 @@ class _CupertinoPickerState extends State<CustomCupertinoPicker> {
         children: <Widget>[
           Positioned.fill(
             child: _CupertinoPickerSemantics(
-              scrollController: widget.scrollController ?? _controller,
+              scrollController: widget.scrollController ?? _controller!,
               child: ListWheelScrollView.useDelegate(
                 controller: widget.scrollController ?? _controller,
                 physics:
@@ -355,9 +344,9 @@ class _CupertinoPickerState extends State<CustomCupertinoPicker> {
 // scroll controller.
 class _CupertinoPickerSemantics extends SingleChildRenderObjectWidget {
   const _CupertinoPickerSemantics({
-    Key key,
-    Widget child,
-    @required this.scrollController,
+    Key? key,
+    required Widget child,
+    required this.scrollController,
   }) : super(key: key, child: child);
 
   final FixedExtentScrollController scrollController;
@@ -383,13 +372,14 @@ class _RenderCupertinoPickerSemantics extends RenderProxyBox {
   }
 
   FixedExtentScrollController get controller => _controller;
-  FixedExtentScrollController _controller;
+  late FixedExtentScrollController _controller;
   set controller(FixedExtentScrollController value) {
     if (value == _controller) return;
-    if (_controller != null)
-      _controller.removeListener(_handleScrollUpdate);
-    else
-      _currentIndex = value.initialItem ?? 0;
+    // final c = _controller;
+    // if (c != null)
+    //   c.removeListener(_handleScrollUpdate);
+    // else
+    _currentIndex = value.initialItem;
     value.addListener(_handleScrollUpdate);
     _controller = value;
   }
@@ -435,15 +425,15 @@ class _RenderCupertinoPickerSemantics extends RenderProxyBox {
     final Map<int, SemanticsNode> indexedChildren = <int, SemanticsNode>{};
     scrollable.visitChildren((SemanticsNode child) {
       assert(child.indexInParent != null);
-      indexedChildren[child.indexInParent] = child;
+      indexedChildren[child.indexInParent!] = child;
       return true;
     });
     if (indexedChildren[_currentIndex] == null) {
       return node.updateWith(config: config);
     }
-    config.value = indexedChildren[_currentIndex].label;
-    final SemanticsNode previousChild = indexedChildren[_currentIndex - 1];
-    final SemanticsNode nextChild = indexedChildren[_currentIndex + 1];
+    config.value = indexedChildren[_currentIndex]!.label;
+    final SemanticsNode? previousChild = indexedChildren[_currentIndex - 1];
+    final SemanticsNode? nextChild = indexedChildren[_currentIndex + 1];
     if (nextChild != null) {
       config.increasedValue = nextChild.label;
       config.onIncrease = _handleIncrease;
