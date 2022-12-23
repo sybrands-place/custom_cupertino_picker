@@ -1,3 +1,7 @@
+## [2.0.3] - 23 dec 2022.
+
+* that was also not intended so need to make background transparent.
+
 ## [2.0.2] - 23 dec 2022.
 
 * removed default selection overlay, because it is not backwards compatible as expected.

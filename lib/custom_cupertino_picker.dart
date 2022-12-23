@@ -88,8 +88,7 @@ class CustomCupertinoPicker extends StatefulWidget {
     required this.itemExtent,
     required this.onSelectedItemChanged,
     required List<Widget> children,
-    // this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
-    this.selectionOverlay,
+    this.selectionOverlay = const CupertinoPickerDefaultSelectionOverlay(),
     bool looping = false,
   })  : assert(diameterRatio > 0.0,
             RenderListWheelViewport.diameterRatioZeroMessage),
@@ -397,7 +396,8 @@ class CupertinoPickerDefaultSelectionOverlay extends StatelessWidget {
   /// Default to true and must not be null.
   const CupertinoPickerDefaultSelectionOverlay({
     Key? key,
-    this.background = CupertinoColors.tertiarySystemFill,
+    // this.background = CupertinoColors.tertiarySystemFill,
+    this.background = const Color(0x00000000),
     this.capStartEdge = true,
     this.capEndEdge = true,
   }) : super(key: key);
