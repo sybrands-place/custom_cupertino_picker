@@ -1,3 +1,7 @@
+## [2.0.2] - 23 dec 2022.
+
+* removed default selection overlay, because it is not backwards compatible as expected.
+
 ## [2.0.1] - 22 dec 2022.
 
 * reimplemented from source
