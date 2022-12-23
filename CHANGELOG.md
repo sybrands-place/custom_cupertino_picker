@@ -1,3 +1,7 @@
+## [2.0.1] - 22 dec 2022.
+
+* reimplemented from source
+
 ## [2.0.0] - 22 dec 2022.
 
 * added null safety
